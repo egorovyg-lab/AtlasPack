@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "AtlasPack"
+version = "1.0.0"
+id = "artifacts/atlaspack"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23917
+
+[services.development]
+run = "pnpm --filter @workspace/atlaspack run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/atlaspack", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/atlaspack/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23917"
+BASE_PATH = "/"
