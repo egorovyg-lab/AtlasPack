@@ -8,6 +8,27 @@ import {
 
 const DOWNLOAD_URL = '#';
 
+const DEMO_ASSETS = {
+  source: `${import.meta.env.BASE_URL}demo/texture_2048.png`,
+  restored: `${import.meta.env.BASE_URL}demo/texture_2048_restored.png`,
+  difference: `${import.meta.env.BASE_URL}demo/texture_2048_diff.png`,
+} as const;
+
+const DEMO_RESULT = {
+  sourceSize: '3.41 МБ',
+  archiveSize: '797.4 КБ',
+  compressionRatio: '4.38×',
+  savings: '77.2%',
+  exportFormat: 'PNG',
+  exportSize: '1.98 МБ',
+  rgbBitDepth: '6 бит/канал',
+  masked: '20.0%',
+  psnr: '35.57 дБ',
+  minimumPsnr: '30 дБ',
+  processingTime: '28.3 с',
+  alphaChannel: 'сохранён',
+} as const;
+
 const FadeIn = ({ children, delay = 0, className = "" }: { children: React.ReactNode, delay?: number, className?: string }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
@@ -135,30 +156,57 @@ const Hero = () => (
           <div className="space-y-2">
             <div className="aspect-square bg-background rounded-lg border border-border/50 relative overflow-hidden group">
               <div className="absolute inset-0 opacity-30" style={{ backgroundSize: '8px 8px', backgroundImage: 'radial-gradient(circle, #475569 1px, transparent 1px)' }}></div>
-              <div className="absolute bottom-2 right-2 bg-background/90 text-[10px] font-mono px-1.5 py-0.5 rounded text-muted-foreground border border-border">
-                24.0 MB
+              <img
+                src={DEMO_ASSETS.source}
+                alt="Исходная текстура AtlasPack"
+                className="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
+                decoding="async"
+              />
+              <div className="absolute bottom-2 right-2 z-10 bg-background/90 text-[10px] font-mono px-1.5 py-0.5 rounded text-muted-foreground border border-border">
+                {DEMO_RESULT.sourceSize}
               </div>
             </div>
             <div className="text-xs text-center font-mono text-muted-foreground">Исходная</div>
           </div>
           <div className="space-y-2">
-            <div className="aspect-square bg-background rounded-lg border border-primary/30 relative overflow-hidden">
-              <div className="absolute inset-0 opacity-10" style={{ backgroundSize: '8px 8px', backgroundImage: 'radial-gradient(circle, #3B82F6 1px, transparent 1px)' }}></div>
-              <div className="absolute bottom-2 right-2 bg-primary/20 text-[10px] font-mono px-1.5 py-0.5 rounded text-primary border border-primary/30 shadow-[0_0_10px_rgba(59,130,246,0.2)]">
-                4.2 MB
+            <div className="aspect-square bg-background rounded-lg border border-primary/30 relative overflow-hidden group">
+              <div className="absolute inset-0 opacity-20" style={{ backgroundSize: '8px 8px', backgroundImage: 'radial-gradient(circle, #3B82F6 1px, transparent 1px)' }}></div>
+              <img
+                src={DEMO_ASSETS.restored}
+                alt="Восстановленная текстура AtlasPack"
+                className="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
+                decoding="async"
+              />
+              <div className="absolute bottom-2 right-2 z-10 bg-primary/20 text-[10px] font-mono px-1.5 py-0.5 rounded text-primary border border-primary/30 shadow-[0_0_10px_rgba(59,130,246,0.2)]">
+                {DEMO_RESULT.exportSize}
               </div>
             </div>
-            <div className="text-xs text-center font-mono text-primary font-medium">Результат</div>
+            <div className="text-xs text-center font-mono text-primary font-medium">Восстановленная</div>
           </div>
           <div className="space-y-2">
-            <div className="aspect-square bg-gradient-to-br from-[#1e1b4b] to-[#312e81] rounded-lg border border-violet-500/30 relative overflow-hidden flex items-center justify-center">
-              <Activity className="text-violet-400 w-8 h-8 opacity-40" />
-              <div className="absolute bottom-2 right-2 bg-violet-500/20 text-[10px] font-mono px-1.5 py-0.5 rounded text-violet-300 border border-violet-500/30">
-                x4 Diff
+            <div className="aspect-square bg-background rounded-lg border border-violet-500/30 relative overflow-hidden group">
+              <img
+                src={DEMO_ASSETS.difference}
+                alt="Карта RGB-различий исходной и восстановленной текстур"
+                className="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
+                decoding="async"
+              />
+              <div className="absolute bottom-2 right-2 z-10 bg-violet-500/20 text-[10px] font-mono px-1.5 py-0.5 rounded text-violet-300 border border-violet-500/30">
+                {DEMO_RESULT.psnr}
               </div>
             </div>
             <div className="text-xs text-center font-mono text-violet-300">Карта различий</div>
           </div>
+        </div>
+
+        <div className="mt-4 pt-3 border-t border-border/50 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono">
+          <span className="inline-flex items-center gap-1.5 text-emerald-400">
+            <CheckCircle className="w-3.5 h-3.5" />
+            Результат принят
+          </span>
+          <span className="text-muted-foreground">
+            Экономия {DEMO_RESULT.savings} · {DEMO_RESULT.processingTime}
+          </span>
         </div>
       </div>
     </FadeIn>
@@ -328,10 +376,17 @@ const BeforeAfter = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <FadeIn delay={0} className="space-y-4">
             <div className="aspect-square rounded-xl border border-border bg-background relative overflow-hidden group">
-              <div className="absolute inset-0 opacity-40 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjMGYxNzJhIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDBMOCA4Wk04IDBMMCA4WiIgc3Ryb2tlPSIjMzMzIiBzdHJva2Utd2lkdGg9IjEiPjwvcGF0aD4KPC9zdmc+')] group-hover:scale-105 transition-transform duration-700"></div>
-              <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
-                <span className="bg-background/80 backdrop-blur text-xs font-mono px-2 py-1 rounded text-muted-foreground border border-border">1024x1024</span>
-                <span className="bg-background/80 backdrop-blur text-xs font-mono px-2 py-1 rounded text-muted-foreground border border-border">4.8 MB</span>
+              <div className="absolute inset-0 opacity-40 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjMGYxNzJhIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDBMOCA4Wk04IDBMMCA4WiIgc3Ryb2tlPSIjMzMzIiBzdHJva2Utd2lkdGg9IjEiPjwvcGF0aD4KPC9zdmc+')] transition-transform duration-700 group-hover:scale-105"></div>
+              <img
+                src={DEMO_ASSETS.source}
+                alt="Исходная текстура AtlasPack, 2048 на 2048 пикселей"
+                className="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="absolute top-4 left-4 right-4 z-10 flex justify-between items-start gap-2">
+                <span className="bg-background/80 backdrop-blur text-xs font-mono px-2 py-1 rounded text-muted-foreground border border-border">2048×2048</span>
+                <span className="bg-background/80 backdrop-blur text-xs font-mono px-2 py-1 rounded text-muted-foreground border border-border">{DEMO_RESULT.sourceSize}</span>
               </div>
             </div>
             <h3 className="text-center font-medium">Исходная текстура</h3>
@@ -339,26 +394,72 @@ const BeforeAfter = () => {
 
           <FadeIn delay={0.1} className="space-y-4">
             <div className="aspect-square rounded-xl border border-primary/40 bg-background relative overflow-hidden group">
-              <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjMGYxNzJhIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDBMOCA4Wk04IDBMMCA4WiIgc3Ryb2tlPSIjM2I4MmY2IiBzdHJva2Utd2lkdGg9IjAuNSI+PC9wYXRoPgo8L3N2Zz4=')] group-hover:scale-105 transition-transform duration-700"></div>
-              <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
-                <span className="bg-primary/20 text-primary text-xs font-mono px-2 py-1 rounded border border-primary/30">1024x1024</span>
-                <span className="bg-primary/20 text-primary text-xs font-mono px-2 py-1 rounded border border-primary/30 shadow-[0_0_10px_rgba(59,130,246,0.3)]">840 KB</span>
+              <div className="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjMGYxNzJhIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDBMOCA4Wk04IDBMMCA4WiIgc3Ryb2tlPSIjM2I4MmY2IiBzdHJva2Utd2lkdGg9IjAuNSI+PC9wYXRoPgo8L3N2Zz4=')] transition-transform duration-700 group-hover:scale-105"></div>
+              <img
+                src={DEMO_ASSETS.restored}
+                alt="Восстановленная текстура AtlasPack, 2048 на 2048 пикселей"
+                className="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="absolute top-4 left-4 right-4 z-10 flex justify-between items-start gap-2">
+                <span className="bg-primary/20 text-primary text-xs font-mono px-2 py-1 rounded border border-primary/30">2048×2048</span>
+                <span className="bg-primary/20 text-primary text-xs font-mono px-2 py-1 rounded border border-primary/30 shadow-[0_0_10px_rgba(59,130,246,0.3)]">{DEMO_RESULT.exportSize}</span>
               </div>
             </div>
-            <h3 className="text-center font-medium">Оптимизированная текстура</h3>
+            <h3 className="text-center font-medium">Восстановленная текстура</h3>
           </FadeIn>
 
           <FadeIn delay={0.2} className="space-y-4">
-            <div className="aspect-square rounded-xl border border-violet-500/40 bg-gradient-to-br from-[#1e1b4b] to-[#312e81] relative overflow-hidden flex items-center justify-center group">
-               <div className="absolute inset-0 opacity-30 mix-blend-screen group-hover:scale-110 transition-transform duration-1000" style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, #8b5cf6 0%, transparent 50%), radial-gradient(circle at 80% 20%, #3b82f6 0%, transparent 40%)' }}></div>
-               <Activity className="w-16 h-16 text-violet-300 opacity-50 relative z-10" />
-               <div className="absolute top-4 left-4 right-4 flex justify-end">
-                <span className="bg-violet-500/20 text-violet-300 text-xs font-mono px-2 py-1 rounded border border-violet-500/30">PSNR: 42.5 dB</span>
+            <div className="aspect-square rounded-xl border border-violet-500/40 bg-background relative overflow-hidden group">
+              <img
+                src={DEMO_ASSETS.difference}
+                alt="Карта RGB-различий исходной и восстановленной текстур, 2048 на 2048 пикселей"
+                className="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="absolute top-4 left-4 right-4 z-10 flex justify-between items-start gap-2">
+                <span className="bg-violet-500/20 text-violet-300 text-xs font-mono px-2 py-1 rounded border border-violet-500/30">2048×2048</span>
+                <span className="bg-violet-500/20 text-violet-300 text-xs font-mono px-2 py-1 rounded border border-violet-500/30">PSNR: {DEMO_RESULT.psnr}</span>
               </div>
             </div>
             <h3 className="text-center font-medium">Карта RGB-различий ×4</h3>
           </FadeIn>
         </div>
+
+        <FadeIn delay={0.3} className="mt-10 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.04] overflow-hidden">
+          <div className="px-5 py-4 border-b border-emerald-500/20 flex flex-wrap items-center justify-between gap-3">
+            <div className="inline-flex items-center gap-2 text-emerald-400 font-semibold">
+              <CheckCircle className="w-5 h-5" />
+              Результат принят
+            </div>
+            <span className="text-sm font-mono text-emerald-300">Экономия {DEMO_RESULT.savings}</span>
+          </div>
+
+          <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { label: 'Исходный файл', value: DEMO_RESULT.sourceSize },
+              { label: 'Архив .atlaspack', value: DEMO_RESULT.archiveSize },
+              { label: 'Коэффициент', value: `${DEMO_RESULT.compressionRatio} · ${DEMO_RESULT.savings}` },
+              { label: 'Экспорт', value: `${DEMO_RESULT.exportFormat}, ${DEMO_RESULT.exportSize}` },
+              { label: 'Битность RGB', value: DEMO_RESULT.rgbBitDepth },
+              { label: 'Замаскировано', value: DEMO_RESULT.masked },
+              { label: 'PSNR', value: `${DEMO_RESULT.psnr} · минимум ${DEMO_RESULT.minimumPsnr}` },
+              { label: 'Время', value: DEMO_RESULT.processingTime },
+            ].map((item) => (
+              <div key={item.label} className="px-5 py-4 border-t border-border/70 lg:[&:nth-child(-n+4)]:border-t-0">
+                <dt className="text-xs text-muted-foreground mb-1">{item.label}</dt>
+                <dd className="text-sm font-mono text-foreground">{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <div className="px-5 py-4 border-t border-border/70 flex items-center gap-2 text-sm text-muted-foreground">
+            <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+            Альфа-канал {DEMO_RESULT.alphaChannel}.
+          </div>
+        </FadeIn>
       </div>
     </section>
   );
