@@ -5,8 +5,10 @@ import {
   Shield, Check, HardDrive, Box, Activity, FileJson, Database,
   Settings, Maximize, AlertCircle, Zap, Lock, CheckCircle
 } from 'lucide-react';
+import UserAgreementPage from './pages/user-agreement';
 
 const DOWNLOAD_URL = '#';
+const USER_AGREEMENT_URL = '#/user-agreement';
 
 const DEMO_ASSETS = {
   source: `${import.meta.env.BASE_URL}demo/texture_2048.png`,
@@ -26,6 +28,8 @@ const DEMO_RESULT = {
   psnr: '35.57 дБ',
   minimumPsnr: '30 дБ',
   processingTime: '28.3 с',
+  performanceHeadroom: '2.12×',
+  estimatedMinimumTime: '≈45–60 с',
   alphaChannel: 'сохранён',
 } as const;
 
@@ -39,6 +43,19 @@ const FadeIn = ({ children, delay = 0, className = "" }: { children: React.React
   >
     {children}
   </motion.div>
+);
+
+const DownloadAgreementNotice = ({ className = "" }: { className?: string }) => (
+  <p className={`text-xs leading-relaxed text-muted-foreground ${className}`}>
+    Скачивая AtlasPack, вы принимаете{' '}
+    <a
+      href={USER_AGREEMENT_URL}
+      className="text-primary hover:text-blue-300 underline underline-offset-4 transition-colors"
+    >
+      Пользовательское соглашение
+    </a>
+    .
+  </p>
 );
 
 const Navbar = () => {
@@ -63,7 +80,14 @@ const Navbar = () => {
           <a href="#kak-rabotaet" className="hover:text-foreground transition-colors" data-testid="link-kak-rabotaet">Как работает</a>
           <a href="#harakteristiki" className="hover:text-foreground transition-colors" data-testid="link-harakteristiki">Характеристики</a>
         </nav>
-        <div className="hidden md:flex">
+        <div className="hidden md:flex items-center gap-2">
+          <a
+            href={USER_AGREEMENT_URL}
+            className="hidden xl:inline-flex items-center justify-center px-3 py-2 rounded-md border border-border bg-card/40 hover:bg-card hover:border-primary/40 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            data-testid="btn-nav-agreement"
+          >
+            Пользовательское соглашение
+          </a>
           <a href={DOWNLOAD_URL} className="bg-primary hover:bg-blue-500 text-primary-foreground px-4 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2" data-testid="btn-nav-download">
             <Download className="w-4 h-4" />
             Скачать для Windows
@@ -78,6 +102,13 @@ const Navbar = () => {
           <a href="#vozmozhnosti" onClick={() => setIsOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground">Возможности</a>
           <a href="#kak-rabotaet" onClick={() => setIsOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground">Как работает</a>
           <a href="#harakteristiki" onClick={() => setIsOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground">Характеристики</a>
+          <a
+            href={USER_AGREEMENT_URL}
+            onClick={() => setIsOpen(false)}
+            className="border border-border bg-card/50 hover:bg-card text-center py-2.5 rounded-md text-sm font-medium transition-colors"
+          >
+            Пользовательское соглашение
+          </a>
           <a href={DOWNLOAD_URL} onClick={() => setIsOpen(false)} className="bg-primary hover:bg-blue-500 text-primary-foreground text-center py-2.5 rounded-md text-sm font-semibold mt-2 flex items-center justify-center gap-2 transition-colors">
             <Download className="w-4 h-4" />
             Скачать для Windows
@@ -107,15 +138,18 @@ const Hero = () => (
       </FadeIn>
       
       <FadeIn delay={0.2}>
-        <div className="flex flex-col sm:flex-row gap-4">
-          <a href={DOWNLOAD_URL} className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary hover:bg-blue-500 text-white font-medium transition-colors" data-testid="btn-hero-download">
-            <Download className="w-5 h-5" />
-            Скачать для Windows
-          </a>
-          <a href="#vozmozhnosti" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-border bg-card/50 hover:bg-card text-foreground font-medium transition-colors backdrop-blur-sm" data-testid="btn-hero-more">
-            Узнать больше
-            <ChevronRight className="w-4 h-4 text-muted-foreground" />
-          </a>
+        <div>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <a href={DOWNLOAD_URL} className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary hover:bg-blue-500 text-white font-medium transition-colors" data-testid="btn-hero-download">
+              <Download className="w-5 h-5" />
+              Скачать для Windows
+            </a>
+            <a href="#vozmozhnosti" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-border bg-card/50 hover:bg-card text-foreground font-medium transition-colors backdrop-blur-sm" data-testid="btn-hero-more">
+              Узнать больше
+              <ChevronRight className="w-4 h-4 text-muted-foreground" />
+            </a>
+          </div>
+          <DownloadAgreementNotice className="mt-3 max-w-md" />
         </div>
       </FadeIn>
 
@@ -460,6 +494,92 @@ const BeforeAfter = () => {
             Альфа-канал {DEMO_RESULT.alphaChannel}.
           </div>
         </FadeIn>
+
+        <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <FadeIn delay={0.4}>
+            <article className="h-full rounded-xl border border-primary/30 bg-primary/[0.04] overflow-hidden">
+              <div className="px-5 py-4 border-b border-primary/20 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs font-mono uppercase tracking-wider text-primary mb-1">Фактический замер</p>
+                  <h3 className="text-lg font-semibold">Тестовая конфигурация</h3>
+                </div>
+                <span className="px-3 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-mono">
+                  {DEMO_RESULT.processingTime}
+                </span>
+              </div>
+
+              <dl className="divide-y divide-border/70">
+                <div className="px-5 py-4 flex items-start gap-3">
+                  <Zap className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                  <div>
+                    <dt className="text-xs text-muted-foreground mb-1">Видеокарта</dt>
+                    <dd className="text-sm font-mono">NVIDIA GeForce RTX 4050 Laptop GPU · 6 ГБ VRAM</dd>
+                  </div>
+                </div>
+                <div className="px-5 py-4 flex items-start gap-3">
+                  <Cpu className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                  <div>
+                    <dt className="text-xs text-muted-foreground mb-1">Процессор</dt>
+                    <dd className="text-sm font-mono">Intel Core i5-12500H · 12 ядер / 16 потоков</dd>
+                  </div>
+                </div>
+                <div className="px-5 py-4 flex items-start gap-3">
+                  <Database className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                  <div>
+                    <dt className="text-xs text-muted-foreground mb-1">Оперативная память</dt>
+                    <dd className="text-sm font-mono">32 ГБ</dd>
+                  </div>
+                </div>
+              </dl>
+
+              <p className="px-5 py-4 border-t border-border/70 text-xs leading-relaxed text-muted-foreground">
+                Замер для RGBA-атласа 2048×2048: маскирование 20.0%, RGB 6 бит/канал, экспорт PNG.
+              </p>
+            </article>
+          </FadeIn>
+
+          <FadeIn delay={0.5}>
+            <article className="h-full rounded-xl border border-violet-500/30 bg-violet-500/[0.04] overflow-hidden">
+              <div className="px-5 py-4 border-b border-violet-500/20 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs font-mono uppercase tracking-wider text-violet-300 mb-1">Расчётный ориентир</p>
+                  <h3 className="text-lg font-semibold">Минимум для обработки менее чем за минуту</h3>
+                </div>
+                <span className="px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-300 text-sm font-mono">
+                  {DEMO_RESULT.estimatedMinimumTime}
+                </span>
+              </div>
+
+              <dl className="divide-y divide-border/70">
+                <div className="px-5 py-4 flex items-start gap-3">
+                  <Zap className="w-5 h-5 text-violet-300 shrink-0 mt-0.5" />
+                  <div>
+                    <dt className="text-xs text-muted-foreground mb-1">Видеокарта</dt>
+                    <dd className="text-sm font-mono">NVIDIA с CUDA и 6 ГБ VRAM · RTX 3050 Laptop 6 ГБ или лучше</dd>
+                  </div>
+                </div>
+                <div className="px-5 py-4 flex items-start gap-3">
+                  <Cpu className="w-5 h-5 text-violet-300 shrink-0 mt-0.5" />
+                  <div>
+                    <dt className="text-xs text-muted-foreground mb-1">Процессор</dt>
+                    <dd className="text-sm font-mono">От 4 ядер / 8 потоков · Core i5-10300H / Ryzen 5 4600H или лучше</dd>
+                  </div>
+                </div>
+                <div className="px-5 py-4 flex items-start gap-3">
+                  <Database className="w-5 h-5 text-violet-300 shrink-0 mt-0.5" />
+                  <div>
+                    <dt className="text-xs text-muted-foreground mb-1">Оперативная память</dt>
+                    <dd className="text-sm font-mono">16 ГБ · желательно не менее 8 ГБ свободно</dd>
+                  </div>
+                </div>
+              </dl>
+
+              <p className="px-5 py-4 border-t border-border/70 text-xs leading-relaxed text-muted-foreground">
+                Оценка использует запас {DEMO_RESULT.performanceHeadroom} относительно замера 28.3 с и не является гарантией. Время зависит от TGP видеокарты, охлаждения, драйвера, первого запуска модели и фоновой нагрузки.
+              </p>
+            </article>
+          </FadeIn>
+        </div>
       </div>
     </section>
   );
@@ -563,6 +683,7 @@ const CTA = () => {
             <Download className="w-6 h-6" />
             Скачать AtlasPack для Windows
           </a>
+          <DownloadAgreementNotice className="mt-4 max-w-lg mx-auto" />
         </FadeIn>
         <FadeIn delay={0.2} className="flex flex-wrap justify-center gap-4 mt-8">
           <span className="px-3 py-1 rounded-full border border-border bg-card text-xs font-mono text-muted-foreground">Windows x64</span>
@@ -596,13 +717,39 @@ const FundBlock = () => {
 
 const Footer = () => {
   return (
-    <footer className="py-6 border-t border-border bg-background text-center">
-      <p className="text-sm text-muted-foreground font-mono">© 2026 AtlasPack</p>
+    <footer className="py-6 px-6 border-t border-border bg-background">
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+        <p className="text-sm text-muted-foreground font-mono">© 2026 AtlasPack · ООО «ВЕРИИТАС»</p>
+        <a
+          href={USER_AGREEMENT_URL}
+          className="text-sm text-muted-foreground hover:text-primary transition-colors"
+        >
+          Пользовательское соглашение
+        </a>
+      </div>
     </footer>
   );
 };
 
 function App() {
+  const [isAgreementPage, setIsAgreementPage] = useState(
+    () => window.location.hash === USER_AGREEMENT_URL,
+  );
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      setIsAgreementPage(window.location.hash === USER_AGREEMENT_URL);
+      window.scrollTo(0, 0);
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  if (isAgreementPage) {
+    return <UserAgreementPage />;
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/30">
       <Navbar />
