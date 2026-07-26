@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import UserAgreementPage from './pages/user-agreement';
 
-const DOWNLOAD_URL = '#';
+const DOWNLOAD_URL = 'https://github.com/egorovyg-lab/AtlasPack/releases/latest/download/AtlasPack-Windows-x64.zip';
 const USER_AGREEMENT_URL = '#/user-agreement';
 
 const DEMO_ASSETS = {
