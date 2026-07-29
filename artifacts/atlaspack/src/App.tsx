@@ -764,15 +764,20 @@ const CTA = () => {
 const FundBlock = () => {
   return (
     <section className="py-16 px-6 border-t border-border bg-card/50">
-      <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
-        <img 
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[minmax(180px,260px)_1fr_minmax(180px,260px)] items-center gap-8 text-center">
+        <img
           src={`${import.meta.env.BASE_URL}fund-logo.png`}
-          alt="Фонд содействия инновациям" 
-          className="w-full max-w-[260px] h-auto shrink-0 bg-white rounded-xl p-3"
+          alt="Фонд содействия инновациям"
+          className="w-full max-w-[260px] h-auto justify-self-center bg-white rounded-xl p-3"
         />
         <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-          Проект создан при поддержке Федерального государственного бюджетного учреждения «Фонд содействия развитию малых форм предприятий в научно-технической сфере» в рамках программы «Студенческий стартап» федерального проекта «Платформа университетского технологического предпринимательства».
+          Проект реализован при поддержке Фонда содействия инновациям в рамках программы «Студенческий стартап» мероприятия «Платформа университетского технологического предпринимательства» федерального проекта «Технологии».
         </p>
+        <img
+          src={`${import.meta.env.BASE_URL}university-tech-platform-logo.png`}
+          alt="Платформа университетского технологического предпринимательства"
+          className="w-full max-w-[220px] h-auto justify-self-center rounded-xl"
+        />
       </div>
     </section>
   );
