@@ -75,9 +75,10 @@ const Navbar = () => {
           <Layers className="text-primary w-6 h-6" />
           <span>Atlas<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-violet-500">Pack</span></span>
         </a>
-        <nav className="hidden md:flex gap-8 text-sm font-medium text-muted-foreground">
+        <nav className="hidden md:flex gap-5 text-sm font-medium text-muted-foreground">
           <a href="#vozmozhnosti" className="hover:text-foreground transition-colors" data-testid="link-vozmozhnosti">Возможности</a>
           <a href="#kak-rabotaet" className="hover:text-foreground transition-colors" data-testid="link-kak-rabotaet">Как работает</a>
+          <a href="#instruktsiya" className="hover:text-foreground transition-colors" data-testid="link-instruktsiya">Инструкция</a>
           <a href="#harakteristiki" className="hover:text-foreground transition-colors" data-testid="link-harakteristiki">Характеристики</a>
         </nav>
         <div className="hidden md:flex items-center gap-2">
@@ -101,6 +102,7 @@ const Navbar = () => {
         <div className="md:hidden px-6 py-4 bg-background border-b border-border flex flex-col gap-4 shadow-xl">
           <a href="#vozmozhnosti" onClick={() => setIsOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground">Возможности</a>
           <a href="#kak-rabotaet" onClick={() => setIsOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground">Как работает</a>
+          <a href="#instruktsiya" onClick={() => setIsOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground">Инструкция</a>
           <a href="#harakteristiki" onClick={() => setIsOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground">Характеристики</a>
           <a
             href={USER_AGREEMENT_URL}
@@ -319,6 +321,67 @@ const HowItWorks = () => {
           <Lock className="w-6 h-6 text-blue-400 shrink-0 mt-1" />
           <p className="text-blue-100 text-sm leading-relaxed">
             <strong className="font-semibold text-white">Все вычисления выполняются на компьютере пользователя.</strong> Изображения не загружаются на удалённые серверы.
+          </p>
+        </FadeIn>
+      </div>
+    </section>
+  );
+};
+
+const QuickGuide = () => {
+  const steps = [
+    {
+      title: 'Распакуйте архив',
+      desc: 'Извлеките всю папку и запустите AtlasPack.exe. Не отделяйте файл от папки _internal.',
+      icon: Download,
+    },
+    {
+      title: 'Выберите режим',
+      desc: 'Сжатие текстуры, восстановление .atlaspack или переупаковка UV-развёртки.',
+      icon: Layers,
+    },
+    {
+      title: 'Добавьте файлы',
+      desc: 'Для сжатия выберите PNG, JPG или WebP; для UV — OBJ и связанную текстуру.',
+      icon: ImageIcon,
+    },
+    {
+      title: 'Запустите обработку',
+      desc: 'Настройте параметры, дождитесь проверки качества и сохраните принятый результат.',
+      icon: CheckCircle,
+    },
+  ];
+
+  return (
+    <section id="instruktsiya" className="py-24 px-6 border-t border-border bg-background">
+      <div className="max-w-7xl mx-auto">
+        <FadeIn className="mb-14 max-w-2xl">
+          <p className="text-xs font-mono uppercase tracking-wider text-primary mb-3">Кратко · 4 шага</p>
+          <h2 className="text-3xl font-bold mb-4">Как пользоваться AtlasPack</h2>
+          <p className="text-muted-foreground">От запуска приложения до готового результата — без регистрации и подключения к интернету.</p>
+        </FadeIn>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {steps.map((step, index) => (
+            <FadeIn key={step.title} delay={index * 0.08}>
+              <article className="h-full rounded-xl border border-border bg-card p-6 hover:border-primary/40 transition-colors">
+                <div className="flex items-center justify-between gap-4 mb-5">
+                  <div className="w-11 h-11 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+                    <step.icon className="w-5 h-5 text-primary" />
+                  </div>
+                  <span className="text-2xl font-mono text-border">0{index + 1}</span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
+                <p className="text-sm leading-relaxed text-muted-foreground">{step.desc}</p>
+              </article>
+            </FadeIn>
+          ))}
+        </div>
+
+        <FadeIn delay={0.35} className="mt-8 rounded-xl border border-blue-900/50 bg-blue-950/30 p-5 flex items-start gap-4">
+          <HardDrive className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
+          <p className="text-sm leading-relaxed text-blue-100">
+            Результаты по умолчанию сохраняются в папку <code className="font-mono text-blue-300">Документы/AtlasPack</code>. Папку можно изменить в верхней части окна приложения.
           </p>
         </FadeIn>
       </div>
@@ -703,9 +766,9 @@ const FundBlock = () => {
     <section className="py-16 px-6 border-t border-border bg-card/50">
       <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
         <img 
-          src="/fund-logo.png" 
+          src={`${import.meta.env.BASE_URL}fund-logo.png`}
           alt="Фонд содействия инновациям" 
-          className="w-full max-w-[200px] h-auto shrink-0 bg-white/5 rounded-lg p-2"
+          className="w-full max-w-[260px] h-auto shrink-0 bg-white rounded-xl p-3"
         />
         <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
           Проект создан при поддержке Федерального государственного бюджетного учреждения «Фонд содействия развитию малых форм предприятий в научно-технической сфере» в рамках программы «Студенческий стартап» федерального проекта «Платформа университетского технологического предпринимательства».
@@ -757,6 +820,7 @@ function App() {
         <Hero />
         <Features />
         <HowItWorks />
+        <QuickGuide />
         <TwoModes />
         <BeforeAfter />
         <TechSpecs />
